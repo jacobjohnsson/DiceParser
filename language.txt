@@ -1,0 +1,11 @@
+Expr  --> Par { BinOp Par }
+Par   --> v | "(" Expr ")" | UnOp Par
+BinOp --> "+" | "-" | "*" | "/"
+UnOp  --> "-"
+
+
+{ B P } => <B P> | <B P B P> | <B P B P B P> | ...
+
+EX:
+1+2 = ((1) + (2))
+1d6+2 = ((1d6) + 2)
