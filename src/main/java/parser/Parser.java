@@ -16,9 +16,6 @@ import expression.*;
 
 public class Parser {
 
-  // private final char SENTINEL = 's';
-  // private final char END = '.';
-
   private Deque<Token> operators = new LinkedList<Token>();
   private Deque<Expression> operands = new LinkedList<Expression>();
 
@@ -87,7 +84,6 @@ public class Parser {
     operators.push(op);
   }
 
-  // ADD DICE HERE
   private Expression mkLeaf(Token t) throws ParseException {
     switch (t.getType()) {
       case NUM:
@@ -156,7 +152,6 @@ public class Parser {
     return t.getValue().equals("-");
   }
 
-  // Returns true if operator a has higher precedence than operator b.
   private boolean higherPrecedence(Token a, Token b) {
     if (a.sameType(Type.SENTINEL)) return false;
     return b.sameType(Type.SENTINEL) ||
@@ -165,5 +160,4 @@ public class Parser {
             b.getValue().equals("+") ||
             b.getValue().equals("-");
   }
-
 }

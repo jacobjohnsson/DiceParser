@@ -1,11 +1,14 @@
 Expr  --> Par { BinOp Par }
-Par   --> v | "(" Expr ")" | UnOp Par
+Par   --> leaf | "(" Expr ")" | UnOp Par
 BinOp --> "+" | "-" | "*" | "/"
 UnOp  --> "-"
 
-
-{ B P } => <B P> | <B P B P> | <B P B P B P> | ...
+leaf  --> Digit | Dice
+Digit --> "1", "2", ... , "9", "0"
+Dice  --> "1d6", "2d20" ...
 
 EX:
 1+2 = ((1) + (2))
 1d6+2 = ((1d6) + 2)
+
+2*-(2+9/3)
