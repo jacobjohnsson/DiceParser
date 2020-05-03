@@ -14,7 +14,7 @@ public class Main {
   }
 
   public void run(String[] args) {
-    test();
+    // test();
     String input = "(2+(-9)/3)*4.";
     Recognizer recognizer = new Recognizer(input);
     try {
@@ -25,7 +25,8 @@ public class Main {
       e.printStackTrace();
     }
 
-    Parser parser = new Parser(input);
+    TokenIterator ti = new TokenIterator("(-9)/3");
+    Parser parser = new Parser(ti);
     try {
       Expression expr = parser.parse();
       System.out.println("Evaluation: " + expr.eval());

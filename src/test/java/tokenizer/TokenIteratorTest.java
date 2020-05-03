@@ -92,12 +92,6 @@ public class TokenIteratorTest {
     while (t.hasNext()) {
       t.next();
     }
-
-    try {
-      t.next();
-      fail("Should return NoSuchElementException.");
-    } catch(NoSuchElementException e) {
-      // Success
-    }
+    assertTrue(t.next().sameType(Token.Type.END));
   }
 }

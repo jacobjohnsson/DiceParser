@@ -5,6 +5,7 @@ public class Token {
   public enum Type {LPAR,
                     RPAR,
                     BINOP,
+                    UNOP,
                     NUM,
                     DICE,
                     SENTINEL,
@@ -12,7 +13,7 @@ public class Token {
                     UNKNOWN};
 
   private final String value;
-  private final Type type;
+  final Type type;
 
   public Token(String value, Type type) {
     this.value = value;
@@ -34,6 +35,10 @@ public class Token {
   public Boolean sameType(Token.Type otherType) {
     return this.type == otherType;
   }
+  
+  public Type getType() {
+    return type;
+  }
 
   public String toString() {
     String result = "";
@@ -44,6 +49,8 @@ public class Token {
         break;
       case BINOP: result = "BINOP: " + value;
         break;
+      case UNOP: result = "UNOP: " + value;
+      break;
       case NUM: result = "NUM: " + value;
         break;
       case DICE: result = "DICE: " + value;

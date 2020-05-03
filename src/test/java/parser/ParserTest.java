@@ -7,13 +7,16 @@ import static org.junit.Assert.*;
 import java.text.ParseException;
 
 import expression.Expression;
+import tokenizer.TokenIterator;
 
 public class ParserTest {
-  
+
   @Test
   public void addTest() {
-    String expression = "1+1.";
-    Parser p = new Parser(expression);
+    String expression = "1+1";
+    TokenIterator ti = new TokenIterator(expression);
+    Parser p = new Parser(ti);
+
     try {
       Expression e = p.parse();
       assertEquals(e.eval(), 2);
@@ -24,8 +27,9 @@ public class ParserTest {
 
   @Test
     public void minusTest() {
-    String expression = "3-1.";
-    Parser p = new Parser(expression);
+    String expression = "3-1";
+    TokenIterator ti = new TokenIterator(expression);
+    Parser p = new Parser(ti);
     Expression e = new NoExpression();
     try {
       e = p.parse();
@@ -37,8 +41,9 @@ public class ParserTest {
 
   @Test
   public void multiplicationTest() {
-    String expression = "3*5.";
-    Parser p = new Parser(expression);
+    String expression = "3*5";
+    TokenIterator ti = new TokenIterator(expression);
+    Parser p = new Parser(ti);
     Expression e = new NoExpression();
     try {
       e = p.parse();
@@ -50,8 +55,9 @@ public class ParserTest {
 
   @Test
   public void divisionTest() {
-    String expression = "9/3.";
-    Parser p = new Parser(expression);
+    String expression = "9/3";
+    TokenIterator ti = new TokenIterator(expression);
+    Parser p = new Parser(ti);
     Expression e = new NoExpression();
     try {
       e = p.parse();
@@ -63,8 +69,9 @@ public class ParserTest {
 
   @Test
   public void negateTest() {
-    String expression = "-4.";
-    Parser p = new Parser(expression);
+    String expression = "-4";
+    TokenIterator ti = new TokenIterator(expression);
+    Parser p = new Parser(ti);
     Expression e = new NoExpression();
     try {
       e = p.parse();
@@ -76,8 +83,9 @@ public class ParserTest {
 
   @Test
   public void paranTest() {
-    String expression = "(2+4)*3.";
-    Parser p = new Parser(expression);
+    String expression = "(2+4)*3";
+    TokenIterator ti = new TokenIterator(expression);
+    Parser p = new Parser(ti);
     Expression e = new NoExpression();
     try {
       e = p.parse();
@@ -86,11 +94,12 @@ public class ParserTest {
     }
     assertEquals(e.eval(), 18);
   }
-  
+
   @Test
   public void mediumTest() {
-    String expression = "(2+(-9)/3)*8.";
-    Parser p = new Parser(expression);
+    String expression = "(2+(-9)/3)*8";
+    TokenIterator ti = new TokenIterator(expression);
+    Parser p = new Parser(ti);
     Expression e = new NoExpression();
     try {
       e = p.parse();
@@ -99,17 +108,18 @@ public class ParserTest {
     }
     assertEquals(e.eval(), -8);
   }
-  
+
   @Test
   public void largeTest() {
-    String expression = "(2+(-9)/3)*8+(5-(-1)+5)-1*1*1-(-2).";
-    Parser p = new Parser(expression);
+    String expression = "(2+(-9)/3)*8+(5-(-1)+5)-1*1*1-(-2)";
+    TokenIterator ti = new TokenIterator(expression);
+    Parser p = new Parser(ti);
     Expression e = new NoExpression();
     try {
       e = p.parse();
     } catch (Exception exc) {
       fail("Failed to parse" + expression);
     }
-    assertEquals(e.eval(), 4);
+    assertEquals(4, e.eval());
   }
 }

@@ -19,10 +19,10 @@ public class Parser {
   // private final char SENTINEL = 's';
   // private final char END = '.';
 
-  Deque<Token> operators = new LinkedList<Token>();
-  Deque<Expression> operands = new LinkedList<Expression>();
+  private Deque<Token> operators = new LinkedList<Token>();
+  private Deque<Expression> operands = new LinkedList<Expression>();
 
-  Iterator<Token> tokens;
+  private TokenIterator tokens;
 
   public Parser(TokenIterator tokens) {
     this.tokens = tokens;
@@ -38,9 +38,9 @@ public class Parser {
 
   private void expression() throws ParseException {
     par();
-    Token next = tokens.peek();
-    while (isBinOp(next)) {
+    for (Token next = tokens.peek();isBinOp(next); next = tokens.peek()) {
       pushOperator(binary(next));
+      consume();
       par();
     }
     while (!operators.peek().sameType(Type.SENTINEL)) {
@@ -51,7 +51,7 @@ public class Parser {
   private void par() throws ParseException {
     Token next = tokens.peek();
 
-    if (next.sameType(Type.NUM)) {
+    if (next.sameType(Type.NUM) || next.sameType(Type.DICE)) {
       // Can't read several digits in a row, "123"
       operands.push(mkLeaf(next));
       consume();
@@ -88,8 +88,21 @@ public class Parser {
   }
 
   // ADD DICE HERE
-  private Expression mkLeaf(Token t) {
-    return new Constant(Integer.parseInt(t.getValue()));
+  private Expression mkLeaf(Token t) throws ParseException {
+    switch (t.getType()) {
+      case NUM:
+        return new Constant(Integer.parseInt(t.getValue()));
+      case DICE:
+        return mkDice(t);
+      default: throw new ParseException("Parse Exception", 0);
+    }
+  }
+
+  private Expression mkDice(Token t) {
+    String dice = t.getValue();
+    int nbr = Integer.parseInt(dice.split("d")[0]);
+    int sides = Integer.parseInt(dice.split("d")[1]);
+    return new Dice(nbr, sides);
   }
 
   private Expression mkNode(Token t, Expression t1, Expression t0) throws ParseException {
@@ -121,18 +134,15 @@ public class Parser {
   }
 
   private void consume() {
-    if (tokens.next().sameType(Type.END)) {
-      return;
-    }
-    index++;
+    tokens.next();
   }
 
   private void error() throws ParseException {
-    throw new ParseException("Error while parsing " + s, 0);
+    throw new ParseException("Error while parsing:", 0);
   }
 
   private void expect(Type type) throws ParseException {
-    if (tokens.next().sameType(type)) {
+    if (tokens.peek().sameType(type)) {
       consume();
     } else {
       error();
@@ -143,17 +153,17 @@ public class Parser {
     return t.sameType(Type.BINOP);
   }
   private boolean isUnOp(Token t) {
-    return t.getValue() == "-";
+    return t.getValue().equals("-");
   }
 
   // Returns true if operator a has higher precedence than operator b.
   private boolean higherPrecedence(Token a, Token b) {
     if (a.sameType(Type.SENTINEL)) return false;
     return b.sameType(Type.SENTINEL) ||
-            a.getValue() == "*" ||
-            a.getValue() == "/" ||
-            b.getValue() == "+" ||
-            b.getValue() == "-";
+            a.getValue().equals("*") ||
+            a.getValue().equals("/") ||
+            b.getValue().equals("+") ||
+            b.getValue().equals("-");
   }
 
 }
