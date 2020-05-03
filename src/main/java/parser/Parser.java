@@ -8,55 +8,58 @@ package parser;
 import java.text.ParseException;
 import java.util.Deque;
 import java.util.LinkedList;
+
+import tokenizer.TokenIterator;
+import tokenizer.Token.Type;
+import tokenizer.Token;
 import expression.*;
 
 public class Parser {
 
-  private final char SENTINEL = 's';
-  private final char END = '.';
+  // private final char SENTINEL = 's';
+  // private final char END = '.';
 
-  Deque<Character> operators = new LinkedList<Character>();
+  Deque<Token> operators = new LinkedList<Token>();
   Deque<Expression> operands = new LinkedList<Expression>();
 
-  private final String s;
-  private int index = 0;
+  Iterator<Token> tokens;
 
-  public Parser(String s) {
-    this.s = s;
+  public Parser(TokenIterator tokens) {
+    this.tokens = tokens;
   }
 
   public Expression parse() throws ParseException {
-    operators.push(SENTINEL);
+    operators.push(new Token("s", Type.SENTINEL));
 
     expression();
-    expect(END);
+    expect(Type.END);
     return operands.pop();
   }
 
   private void expression() throws ParseException {
     par();
-    while (isBinOp(next())) {
-      pushOperator(binary(next()));
-      consume();
+    Token next = tokens.peek();
+    while (isBinOp(next)) {
+      pushOperator(binary(next));
       par();
     }
-    while (operators.peek() != SENTINEL) {
+    while (!operators.peek().sameType(Type.SENTINEL)) {
       popOperator();
     }
   }
 
   private void par() throws ParseException {
-    char next = next();
+    Token next = tokens.peek();
 
-    if (Character.isDigit(next)) {
+    if (next.sameType(Type.NUM)) {
       // Can't read several digits in a row, "123"
       operands.push(mkLeaf(next));
       consume();
-    } else if (next == '(') {
+    } else if (next.sameType(Type.LPAR)) {
       consume();
-      operators.push(SENTINEL);
+      operators.push(new Token("s", Type.SENTINEL));
       expression();
-      expect(')');
+      expect(Type.RPAR);
       operators.pop();
     } else if (isUnOp(next)) {
       pushOperator(unary(next));
@@ -77,58 +80,48 @@ public class Parser {
     }
   }
 
-  private void pushOperator(char op) throws ParseException {
+  private void pushOperator(Token op) throws ParseException {
     while (higherPrecedence(operators.peek(), op)) {
       popOperator();
     }
     operators.push(op);
   }
 
-
-  private Expression mkLeaf(char c) {
-    return new Constant(Character.getNumericValue(c));
+  // ADD DICE HERE
+  private Expression mkLeaf(Token t) {
+    return new Constant(Integer.parseInt(t.getValue()));
   }
 
-  private Expression mkNode(char op, Expression t1, Expression t0) throws ParseException {
-    switch (op) {
-      case '+': return new Plus(t0, t1);
-      case '-': return new Minus(t0, t1);
-      case '*': return new Mul(t0, t1);
-      case '/': return new Div(t0, t1);
+  private Expression mkNode(Token t, Expression t1, Expression t0) throws ParseException {
+    switch (t.getValue()) {
+      case "+": return new Plus(t0, t1);
+      case "-": return new Minus(t0, t1);
+      case "*": return new Mul(t0, t1);
+      case "/": return new Div(t0, t1);
       default: throw new ParseException("Parse exception", 0);
     }
   }
 
-  private Expression mkNode(char op, Expression t0) throws ParseException {
-    switch (op) {
-      case 'n': return new Neg(t0);
+  private Expression mkNode(Token t, Expression t0) throws ParseException {
+    switch (t.getValue()) {
+      case "n": return new Neg(t0);
       default: throw new ParseException("Parse exception", 0);
     }
   }
 
-  private Character binary(char c) throws ParseException {
-    switch (c) {
-      case '+': return '+';
-      case '-': return '-';
-      case '*': return '*';
-      case '/': return '/';
-      default: throw new ParseException("Parse exception", 0);
-    }
+  private Token binary(Token t) throws ParseException {
+    return t;
   }
 
-  private Character unary(char c) throws ParseException {
-    switch (c) {
-      case '-': return 'n';
+  private Token unary(Token t) throws ParseException {
+    switch (t.getValue()) {
+      case "-": return new Token("n", Type.UNOP);
       default: throw new ParseException("Parse exception", 0);
     }
-  }
-
-  private char next() {
-    return s.charAt(index);
   }
 
   private void consume() {
-    if (next() == END) {
+    if (tokens.next().sameType(Type.END)) {
       return;
     }
     index++;
@@ -138,25 +131,29 @@ public class Parser {
     throw new ParseException("Error while parsing " + s, 0);
   }
 
-  private void expect(char c) throws ParseException {
-    if (next() == c) {
+  private void expect(Type type) throws ParseException {
+    if (tokens.next().sameType(type)) {
       consume();
     } else {
       error();
     }
   }
 
-  private boolean isBinOp(char c) {
-    return (c == '+') || (c == '-') || (c == '*') || (c == '/') || (c == 'd');
+  private boolean isBinOp(Token t) {
+    return t.sameType(Type.BINOP);
   }
-  private boolean isUnOp(char c) {
-    return (c == '-');
+  private boolean isUnOp(Token t) {
+    return t.getValue() == "-";
   }
 
   // Returns true if operator a has higher precedence than operator b.
-  private boolean higherPrecedence(char a, char b) {
-    if (a == SENTINEL) return false;
-    return b == SENTINEL || a == '*' || a == '/' || b == '+' || b == '-';
+  private boolean higherPrecedence(Token a, Token b) {
+    if (a.sameType(Type.SENTINEL)) return false;
+    return b.sameType(Type.SENTINEL) ||
+            a.getValue() == "*" ||
+            a.getValue() == "/" ||
+            b.getValue() == "+" ||
+            b.getValue() == "-";
   }
 
 }
