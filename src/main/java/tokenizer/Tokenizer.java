@@ -10,7 +10,7 @@ public class Tokenizer implements Enumeration<String> {
   private String input;
   private int index;
   private final String DICE = "^[1-9]+d[1-9]+";
-  private final String DIGIT = "^\\d+";
+  private final String NUM = "^\\d+";
   private final String OPERATOR = "^[+-@\\*/]"; // @\\* => *
 
   public Tokenizer(String s) {
@@ -47,7 +47,7 @@ public class Tokenizer implements Enumeration<String> {
 
   private String findDigit() {
     String result = "";
-    Pattern p = Pattern.compile(DIGIT);
+    Pattern p = Pattern.compile(NUM);
     Matcher m = p.matcher(input.substring(index));
     if (m.find()) {
       System.out.println("Found Digit");

@@ -41,7 +41,6 @@ public class Recognizer {
 
   private void expression() throws ParseException {
     par();
-    System.out.println(index);
     while (isBinOp(next())) {
       consume();
       par();

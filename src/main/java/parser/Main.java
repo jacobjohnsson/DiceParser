@@ -4,13 +4,17 @@
 package parser;
 import expression.*;
 
+import java.util.Iterator;
+import tokenizer.TokenIterator;
+import tokenizer.Token;
+
 public class Main {
   public static void main(String[] args) {
     new Main().run(args);
   }
 
   public void run(String[] args) {
-    //test();
+    test();
     String input = "(2+(-9)/3)*4.";
     Recognizer recognizer = new Recognizer(input);
     try {
@@ -34,29 +38,19 @@ public class Main {
   }
 
   private void test() {
-    System.out.println("1d3");
-    Expression exp0 = new Dice(3);
-    System.out.println(exp0.eval());
+    Iterator<Token> tokenIt = new TokenIterator("1");
 
-    System.out.println("3+1d6");
-    Expression exp1 = new Plus(new Constant(3), new Dice(6));
-    System.out.println(exp1.eval());
+    for (int i = 0; tokenIt.hasNext(); i++) {
+      System.out.println("Token " + i + ": " + tokenIt.next());
+    }
 
-    System.out.println("1d6-2");
-    Expression exp2 = new Minus(new Dice(6), new Constant(2));
-    System.out.println(exp2.eval());
+    System.out.println("-----------");
 
-    System.out.println("1d20*2");
-    Expression exp3 = new Mul(new Dice(20), new Constant(2));
-    System.out.println(exp3.eval());
+    Iterator<Token> tokenIt2 = new TokenIterator("1+1d6");
 
-    System.out.println("1d12/3");
-    Expression exp4 = new Div(new Dice(12), new Constant(3));
-    System.out.println(exp4.eval());
-
-    System.out.println("-(2 * 1d6 + 2)");
-    Expression exp5 = new Neg(new Plus(new Mul(new Dice(6), new Constant(2)), new Constant(2)));
-    System.out.println(exp5.eval());
+    for (int i = 0; tokenIt2.hasNext(); i++) {
+      System.out.println("Token " + i + ": " + tokenIt2.next());
+    }
   }
 
 
