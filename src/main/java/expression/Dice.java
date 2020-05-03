@@ -3,11 +3,13 @@ package expression;
 import java.util.Random;
 
 public class Dice implements Expression {
-  private int sides;
+  private final int sides;
+  private final int nbr;
   private int result = 0;
 
-  public Dice(int sides) {
+  public Dice(int nbr, int sides) {
     this.sides = sides;
+    this.nbr = nbr;
   }
 
   public int eval() {
@@ -15,10 +17,10 @@ public class Dice implements Expression {
       return result;
     } else {
       Random r = new Random();
-      result = r.nextInt(sides) + 1;
+      for (int i = 0; i < nbr; i++) {
+        result += r.nextInt(sides) + 1;
+      }
     }
-
     return result;
-
   }
 }
