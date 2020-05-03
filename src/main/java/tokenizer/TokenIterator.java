@@ -26,9 +26,9 @@ public class TokenIterator implements Iterator<Token> {
     return index < input.length();
   }
 
-  public Token next() throws NoSuchElementException {
+  public Token next() {
     if (index >= input.length()) {
-      throw new NoSuchElementException();
+      return endToken();
     }
 
     Token result = findDice();
@@ -37,7 +37,7 @@ public class TokenIterator implements Iterator<Token> {
 
   public Token peek() throws NoSuchElementException {
     if (index >= input.length()) {
-      throw new NoSuchElementException();
+      return endToken();
     }
     return findDice();
   }
@@ -115,5 +115,9 @@ public class TokenIterator implements Iterator<Token> {
     String result = input.substring(index, index + 1);
     consume(result.length());
     return new Token(result, Token.Type.UNKNOWN);
+  }
+
+  private Token endToken() {
+    return new Token(".", Type.END);
   }
 }

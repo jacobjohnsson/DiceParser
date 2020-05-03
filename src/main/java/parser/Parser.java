@@ -6,7 +6,7 @@
 package parser;
 
 import java.text.ParseException;
-import java.util.Deque  ;
+import java.util.Deque;
 import java.util.LinkedList;
 import expression.*;
 

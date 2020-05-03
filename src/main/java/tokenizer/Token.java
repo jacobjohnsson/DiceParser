@@ -7,6 +7,8 @@ public class Token {
                     BINOP,
                     NUM,
                     DICE,
+                    SENTINEL,
+                    END,
                     UNKNOWN};
 
   private final String value;
@@ -45,6 +47,10 @@ public class Token {
       case NUM: result = "NUM: " + value;
         break;
       case DICE: result = "DICE: " + value;
+        break;
+      case SENTINEL: result = "SENTINEL: " + value;
+        break;
+      case END: result = "END: " + value;
         break;
       case UNKNOWN: result = "UNKNOWN: " + value;
         break;
