@@ -14,8 +14,8 @@ public class TokenIterator implements Iterator<Token> {
   private final String DICE = "^[0-9]+d[0-9]+";
   private final String NUM = "^\\d+";
   private final String BINOP = "^[+-@\\*/]"; // @\\* => *
-  private final String LPAR = "^\\("; // @\\* => *
-  private final String RPAR = "^\\)"; // @\\* => *
+  private final String LPAR = "^\\(";
+  private final String RPAR = "^\\)";
 
   public TokenIterator(String s) {
     this.input = s;

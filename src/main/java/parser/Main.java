@@ -8,6 +8,11 @@ import tokenizer.Token;
 
 public class Main {
   public static void main(String[] args) {
+    if (args.length == 0 || args.length > 1) {
+      System.out.println("Expected one argument.");
+      return;
+    }
+
     new Main().run(args);
   }
 
