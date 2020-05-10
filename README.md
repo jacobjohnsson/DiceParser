@@ -7,16 +7,16 @@ run in anyway you like with a number of arguments such as "1d6+2 2d6+4 1d20-6 -1
 ## Details
 This is an implementation of a recursice descent parser for the following language.
 
-Expr  --> Par {BinOp Par}
-Par   --> "(" Expr ")"
-Par   --> UnOp Par
-Par   --> leaf
-BinOp --> "+"
-BinOp --> "-"
-BinOp --> "*"
-BinOp --> "/"
-UnOp  --> "-"
+Expr  --> Par {BinOp Par}  
+Par   --> "(" Expr ")"  
+Par   --> UnOp Par  
+Par   --> leaf  
+BinOp --> "+"  
+BinOp --> "-"  
+BinOp --> "*"  
+BinOp --> "/"  
+UnOp  --> "-"  
 
-leaf  --> Digit | Dice
-Digit --> "0" | "1" | ... | "9"
-Dice  --> "1d6" | "2d20" | "100d100" ...
+leaf  --> Digit | Dice  
+Digit --> "0" | "1" | ... | "9"  
+Dice  --> "1d6" | "2d20" | "100d100" ...  
