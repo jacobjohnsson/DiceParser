@@ -17,6 +17,7 @@ BinOp --> "*"
 BinOp --> "/"  
 UnOp  --> "-"  
 
-leaf  --> Digit | Dice  
-Digit --> "0" | "1" | ... | "9"  
-Dice  --> "1d6" | "2d20" | "100d100" ...  
+leaf  --> Num | Dice  
+Dice  --> Num "d" Num  
+Num   --> "0" | "1" | ... 
+
