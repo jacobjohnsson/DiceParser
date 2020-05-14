@@ -5,7 +5,7 @@ A parser for mathematical expressions including dice, such as "2d20+8"
 run in anyway you like with a number of arguments such as "1d6+2 2d6+4 1d20-6 -1d6 10*(1d6+4) 1d6*1d6"
 
 ## Details
-This is an implementation of a recursice descent parser for the following language.
+This is an implementation of a recursice descent parser for the language below. The Shunting yard algorithm is used to build the abstract syntax tree for later evaluation.
 
 Expr  --> Par {BinOp Par}  
 Par   --> "(" Expr ")"  
