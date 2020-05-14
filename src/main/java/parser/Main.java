@@ -8,10 +8,7 @@ import tokenizer.Token;
 
 public class Main {
   public static void main(String[] args) {
-    Main main = new Main();
-    for (String input : args) {
-      main.run(args);
-    }
+    new Main().run(args);
   }
 
   public void run(String[] args) {
@@ -21,8 +18,6 @@ public class Main {
       int result = parse(input);
       System.out.println(input + ": " + result);
     }
-
-
   }
 
   private int parse(String input) {

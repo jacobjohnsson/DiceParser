@@ -122,4 +122,36 @@ public class ParserTest {
     }
     assertEquals(4, e.eval());
   }
+
+  @Test
+  public void smallDiceTest() {
+    for (int i = 0; i < 50; i++) {
+      String expression = "1d6";
+      TokenIterator ti = new TokenIterator(expression);
+      Parser p = new Parser(ti);
+      Expression e = new NoExpression();
+      try {
+        e = p.parse();
+      } catch (Exception exc) {
+        fail("Failed to parse" + expression);
+      }
+      assertTrue(1 <= e.eval() && e.eval() <= 6);
+    }
+  }
+
+  @Test
+  public void multipleDiceTest() {
+    for (int i = 0; i < 50; i++) {
+      String expression = "10*1d10";
+      TokenIterator ti = new TokenIterator(expression);
+      Parser p = new Parser(ti);
+      Expression e = new NoExpression();
+      try {
+        e = p.parse();
+      } catch (Exception exc) {
+        fail("Failed to parse" + expression);
+      }
+      assertTrue(e.eval() % 10 == 0);
+    }
+  }
 }
